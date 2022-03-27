@@ -3,6 +3,7 @@
     "noEmit": true,
     "esModuleInterop": true,
     "target": "ES2015",
+    "module": "commonjs",
     "noImplicitAny": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,

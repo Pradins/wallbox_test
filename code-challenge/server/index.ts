@@ -14,9 +14,7 @@ chargersWidgetMap.set('c1234', {widget: 'wABCD'});
 const widgetWebSocketsMap = new Map<string, WebSocket>();
 
 function getDeviceId(url: string) {
-    // TODO: can this be done in a better way ? more fancy
-    const splitUrl = url && url.split('/');
-    return splitUrl && splitUrl[splitUrl.length - 1];
+    return url.split('/').pop();
 }
 
 function getChargingStatus(soc: number) {
@@ -44,11 +42,9 @@ function createChargersServer(port = 3100): WebSocket.Server {
             }
 
             const widgetID = chargerId && chargersWidgetMap.get(chargerId)?.widget;
+            const widgetWebsocket = widgetID && widgetWebSocketsMap.get(widgetID);
 
-            // TODO: improve this typing
-            const widgetWebsocket: "" | undefined | WebSocket = widgetID && widgetWebSocketsMap.get(widgetID);
-
-            if (chargingValue) {
+            if (chargingValue && widgetWebsocket) {
                 const messageToSend = {
                     event: 'chargingStatus',
                     data: {
@@ -58,11 +54,13 @@ function createChargersServer(port = 3100): WebSocket.Server {
 
                 widgetWebsocket && widgetWebsocket.send(JSON.stringify(messageToSend), {}, (err: Error) => {
                     if (err) {
-                        console.log('error sending message to widget: ', widgetID);
+                        console.error('error sending message to widget: ', widgetID);
                     } else {
                         console.log('message delivered successfully from server to widget: ', widgetID);
                     }
                 });
+            } else {
+                console.error('widget websocket not found for: ', widgetID);
             }
         });
 
