@@ -113,3 +113,12 @@ It connects to your server and displays the status it receives on the screen.
 - Use the servers we have provided in the `.server/index.ts` boilerplate code, respecting ports `3100` and `3200` for both charger and widget servers, respectively.
 
 - DO NOT edit anything in the in the `widget` and `charger` folders. As mentioned, use only the `./server/index.ts` file for your implementation and the `server/e2e.spec.ts` for your e2e tests.
+
+
+
+## Notes from the candidate
+
+- Maybe the approach for the tests is not the best one or the one you wanted me to do. I decided to mock the widget and the charger. by triggering events from the charger and the widget I check the expected messages reach the widget. It looks like more aa unit test of the Server to me and not a complete test of the integration between the three components. But is what i could do without changing the rest of the components.
+- I would like to unit test some events in the server like: a charger sends a message but it does not have a widget associated in the map -> an exception or event is triggered etc. But i didnt see how to test that without changing alot the existing code.
+- I created a dockerfile to run the tests. So running after the instalation of the dependencies "npm run test_local" should create an instance of the server in a Docker container and run the tests against it.
+- We do technical tests in my company but we dont provide such a nice working suite like the one you do [charger -> server -> widget]. Doing the test and seeing that the messages from the charger were showing with colors in the widget terminal was so nice. So kudos to whoever decided to go this way for the technical test and congratulations to the ones who coded it. I dont know if my test was successfull or not. but it was fun :)
